@@ -107,7 +107,7 @@ chg-agent/
 
 │
 
-├── BAZA_WIEDZY_CORNELIA_HOTELS_GROUP/                # Baza wiedzy zawierająca 78 dokumentów
+├── BAZA_WIEDZY_CORNELIA_HOTELS_GROUP.zip/                # Baza wiedzy zawierająca 78 dokumentów (do pobrania)
 
 └── README.md                                         # Ten Plik
 
