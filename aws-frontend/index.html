@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHG Compass | Cornelia Hotels Group</title>
+    
+    <!-- Import czcionki i ikon -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        :root {
+            --color-primary: #8B0000;
+            --color-white: #FFFFFF;
+            --color-black: #000000;
+            --color-background: #F4F5F7;
+            --color-text: #333333;
+            --color-text-light: #6b7280;
+            --color-border: #E5E7EB;
+            --font-family: 'Manrope', sans-serif;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+             /* Ustawienie responsywnej bazowej wielkości czcionki */
+            font-size: clamp(15px, 1vw + 0.5rem, 18px);
+        }
+
+        body {
+            height: 100%;
+            font-family: var(--font-family);
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 24% 52% 24%;
+            grid-template-rows: 1fr auto;
+            grid-template-areas:
+                "sidebar chat info"
+                "footer footer footer";
+            height: 100vh;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-primary);
+            border-bottom: 1px solid var(--color-border);
+            height: var(--header-height);
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            font-size: clamp(1.25rem, 4vw, 1.75rem);
+            font-weight: 700;
+            color: var(--color-white);
+        }
+
+        .app-sidebar {
+            grid-area: sidebar;
+            background-color: var(--color-white);
+            border-right: 1px solid var(--color-border);
+            padding: clamp(1rem, 2vw, 1.5rem);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .section-title {
+            font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-light);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 0.5rem; 
+        }
+        
+        .sidebar-logo img {
+            height: 85px; 
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .sidebar-nav {
+            flex-grow: 1;
+        }
+
+        .sidebar-nav ul {
+            list-style-type: none;
+        }
+        
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            padding: clamp(0.4rem, 1vw, 0.6rem) 1rem;
+            text-decoration: none;
+            color: var(--color-text);
+            border-radius: 8px;
+            margin-bottom: 0.25rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+            font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+        }
+
+        .sidebar-nav li a:hover, .sidebar-nav li a.active {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .sidebar-nav li a .nav-icon {
+            width: 1.25rem; 
+            margin-right: 1rem;
+            text-align: center;
+			position: relative;
+			top: 1px;
+        }
+
+        .sidebar-nav .submenu-toggle {
+            margin-left: auto;
+            transition: transform 0.2s ease-in-out;
+            font-size: 0.8em;
+        }
+        
+        .sidebar-nav .has-submenu.open > a .submenu-toggle {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-nav .submenu {
+            display: none;
+            margin-top: 0.5rem;
+            margin-left: 1.5rem;
+            border-left: 2px solid var(--color-border);
+            padding-left: 1rem;
+        }
+        
+        .sidebar-nav .has-submenu.open > .submenu {
+            display: block;
+        }
+
+        .sidebar-nav .submenu li a {
+            padding: 0.6rem 1rem;
+            font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+        }
+        
+        .sidebar-nav .submenu .submenu {
+             margin-left: 1rem;
+             padding-left: 0.75rem;
+        }
+
+        .app-chat {
+            grid-area: chat;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-background);
+            overflow: hidden; 
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 80%;
+            margin-bottom: 1rem;
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .bot-message {
+            background-color: var(--color-white);
+            color: var(--color-text);
+            align-self: flex-start;
+            border-top-left-radius: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .user-message {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .chat-input-area {
+            padding: 1rem clamp(1rem, 2vw, 1.5rem);
+            border-top: 1px solid var(--color-border);
+            background-color: var(--color-white);
+            display: flex;
+            align-items: center;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: var(--font-family);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #user-input:focus {
+            border-color: var(--color-primary);
+        }
+
+        #send-btn {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem;
+            margin-left: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        #send-btn:hover {
+            opacity: 0.9;
+        }
+
+        #send-btn svg {
+            width: 1rem;
+            height: 1rem;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #9ca3af;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1.0);
+            }
+        }
+
+        .app-info {
+            grid-area: info;
+            background-color: var(--color-white);
+            border-left: 1px solid var(--color-border);
+            padding: clamp(1rem, 2vw, 1.5rem);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-card {
+            margin-bottom: 0.6rem;
+        }
+        
+        .info-card p {
+            line-height: 1.2; 
+            color: var(--color-black);
+            font-size: clamp(0.7rem, 1vw, 0.75rem);
+            text-align: justify;
+        }
+        
+        .brands-container {
+            display: flex;
+            flex-flow: row wrap;
+            gap: 0.3rem;
+            justify-content: center;
+        }
+        
+        .brand-logo {
+            flex: 0 1 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.2rem;
+            min-width: 80px;
+        }
+        
+        .brand-logo img {
+            max-width: 100%;
+            height: auto;
+            max-height: 85px;
+            object-fit: contain;
+        }
+
+        .app-footer {
+            grid-area: footer;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: clamp(0.75rem, 1.5vw, 0.85rem);
+            color: var(--color-text-light);
+            background-color: var(--color-white);
+            border-top: 1px solid var(--color-border);
+        }
+        
+        @media (max-width: 1200px) {
+            .app-container {
+                grid-template-columns: 280px 1fr;
+                grid-template-areas:
+                    "sidebar chat"
+                    "footer footer";
+            }
+            .app-info {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "chat"
+                    "footer";
+            }
+            .app-sidebar {
+                display: none; 
+            }
+            .header-title {
+                font-size: 1.25rem;
+            }
+            .chat-header {
+                padding: 0 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+
+        <aside class="app-sidebar">
+            <div class="sidebar-logo">
+                <img src="graphics/Logo CHG.png" alt="Logo Cornelia Hotels Group">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <h2 class="section-title">Baza Wiedzy</h2>
+                <ul>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-sitemap nav-icon"></i> Struktura i Organizacja
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/01_Struktura_i_Organizacja/CHG_siec_hoteli.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Sieć Hoteli CHG (pdf)</a></li>
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/01_Struktura_i_Organizacja/CHG_siec_hoteli.xlsx" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel nav-icon"></i> Sieć Hoteli CHG (xlsx)</a></li>
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/01_Struktura_i_Organizacja/CHG_struktura_headquaters.xlsx" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel nav-icon"></i> Struktura Centrali</a></li>
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/01_Struktura_i_Organizacja/CHG_struktura_hotele.xlsx" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel nav-icon"></i> Struktura w Hotelach CHG</a></li>
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/01_Struktura_i_Organizacja/Opis_Standardow_Hoteli_CHG.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Opis Standardów Hoteli</a></li>
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/01_Struktura_i_Organizacja/Schemat_Organizacyjny_CHG_Headquarters.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Schemat Organizacyjny Centrali</a></li>
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/01_Struktura_i_Organizacja/Wykaz_Prezesow_i_Dyrektorow_Hoteli.xlsx" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel nav-icon"></i> Wykaz Prezesów i Dyrektorów</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-users nav-icon"></i> Kadry i HR
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li class="has-submenu">
+                                <a href="#">Benefity <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Benefity/Opis_Pakietu_Opieki_Medycznej_Medicover.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Pakiet Opieki Medycznej Medicover</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Benefity/Platforma_Kafeteryjna_MyBenefit_Instrukcja.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Platforma Kafeteryjna MyBenefit</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Benefity/Program_Znizek_Pracowniczych_Na_Pobyty_w_Hotelach_CHG.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Program Zniżek Pracowniczych Na Pobyt w Hotelach CHG</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Benefity/Warunki_Ubezpieczenia_Grupy_na_Zycie.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Warunki Ubezpieczenia Grupowego na Życie</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Benefity/Wniosek_o_Dofinansowanie_Wypoczynku.docx" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-word nav-icon"></i> Wniosek o Dofinansowanie Wypoczynku</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Benefity/Zasady_Korzystania_z_Karty_Multisport.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Zasady Korzystania z Karty Multisport</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Czas Pracy i Urlopy <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Czas_Pracy_i_Urlopy/Wniosek_Urlopowy_Wzor.docx" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-word nav-icon"></i> Wzór Wniosku Urlopowego</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Czas_Pracy_i_Urlopy/Zasady_Ewidencji_i_Rozliczania_Czasu_Pracy.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Zasady Ewidencji i Rozliczania Czasu Pracy</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Regulaminy i Zasady <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                 <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Regulaminy_i_Zasady/Kodeks_Etyki_i_Postepowania_Pracownikow_CHG.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Kodeks Etyki i Postępowania Pracowników</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Regulaminy_i_Zasady/Polityka_Antymobbingowa_i_Antydyskryminacyjna.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Polityka Antymobbingowa i Antydyskryminacyjna</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Regulaminy_i_Zasady/Regulamin_Pracy.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Regulamin Pracy</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Regulaminy_i_Zasady/Regulamin_Wynagradzania_i_Premiowania.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Regulamin Wynagradzania i Premiowania</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Regulaminy_i_Zasady/Zasady_Pracy_Zdalnej.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Zasady Pracy Zdalnej</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Rekrutacja i Onboarding <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Rekrutacja_i_Onboarding/Procedura_Rekrutacyjna_CHG.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Rekrutacyjna CHG</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Rekrutacja_i_Onboarding/Program_Polecen_Pracowniczych_Zasady.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Program Poleceń Pracowniczych</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Rekrutacja_i_Onboarding/Przewodnik_Onboardingowy_dla_Nowego_Pracownika.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Przewodnik Onboardingowy dla Nowego Pracownika</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Rozwój i Szkolenia <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Rozwoj_i_Szkolenia/Katalog_Szkolen_Dostepnych_w_CHG.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Katalog szkoleń dostępnych w CHG</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Rozwoj_i_Szkolenia/Program_Dofinansowania_Studiow_Podyplomowych.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Program Dofinansowania Studiów Podyplomowych</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Rozwoj_i_Szkolenia/Sciezki_Kariery_w_Pionie_Operacyjnym.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Ścieżki Kariery w Pionie Operacyjnym</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/02_Kadry_i_HR_Biznes_Partnering/Rozwoj_i_Szkolenia/System_Ocen_Okresowych.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> System Ocen Okresowych</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-concierge-bell nav-icon"></i> Operacje Hotelowe
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                         <ul class="submenu">
+                            <li class="has-submenu">
+                                <a href="#">Standardy Operacyjne wg Działu <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li class="has-submenu">
+                                        <a href="#">Front Office i Recepcja <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                        <ul class="submenu">
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Front_Office_Recepcja/Podrecznik_Systemu_Rezerwacyjnego_PMS.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Podręcznik Systemu Rezerwacyjnego PMS</a></li>
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Front_Office_Recepcja/Procedura_Obslugi_Telefonicznej_i_Mailowej.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Obsługi Telefonicznej i Mailowej</a></li>
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Front_Office_Recepcja/Standard_Meldowania_i_Wymeldowania_Gosci.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Standard Meldowania i Wymeldowania Gości</a></li>
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Front_Office_Recepcja/Zarzadzanie_Reklamacjami_Gosci.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Zarządzanie Reklamacjami Gości</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-submenu">
+                                        <a href="#">Gastronomia (F&B) <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                        <ul class="submenu">
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Gastronomia_F%26B/Procedury_Sanitarne_i_HACCP_w_Kuchni.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedury Sanitarne i HACCP w Kuchni</a></li>
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Gastronomia_F%26B/Standardy_Obslugi_Kelnerskiej.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Standardy Obsługi Kelnerskiej</a></li>
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Gastronomia_F%26B/Zasady_Organizacji_Bankietow_i_Konferencji.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Zasady Organizacji Bankietów i Konferencji</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-submenu">
+                                        <a href="#">Housekeeping (Służba Pięter) <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                         <ul class="submenu">
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Housekeeping_Sluzba_Pieter/Procedura_Rzeczy_Znalezionych_i_Zagubionych.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Rzeczy Znalezionych i Zagubionych</a></li>
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Housekeeping_Sluzba_Pieter/Procedura_Statusow_Pokojow.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Statusów Pokojów</a></li>
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Housekeeping_Sluzba_Pieter/Standardy_Sprzatania_Pokoju_wg_Kategorii_Hotelu.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Standardy Sprzątania Pokoju wg Kategorii Hotelu</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="has-submenu">
+                                        <a href="#">Spa & Wellness <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                        <ul class="submenu">
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Spa_i_Wellness/Regulamin_Korzystania_ze_Strefy_Wellness.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Regulamin Korzystania ze Strefy Wellness</a></li>
+                                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Dzialu/Spa_i_Wellness/Standardy_Obslugi_Klienta_w_SPA.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Standardy Obsługi Klienta w SPA</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Standardy Operacyjne wg Kategorii Hotelu <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Kategorii_Hotelu/Podrecznik_Operacyjny_Cornelia_Budget.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Podręcznik Operacyjny Cornelia Budget</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Kategorii_Hotelu/Podrecznik_Operacyjny_Cornelia_Comfort.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Podręcznik Operacyjny Cornelia Comfort</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Kategorii_Hotelu/Podrecznik_Operacyjny_Cornelia_Select.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Podręcznik Operacyjny Cornelia Select</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Kategorii_Hotelu/Podrecznik_Operacyjny_Cornelia_Palace.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Podręcznik Operacyjny Cornelia Palace</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Standardy_Operacyjne_wg_Kategorii_Hotelu/Podrecznik_Operacyjny_Cornelia_Royal_Resort.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Podręcznik Operacyjny Cornelia Royal Resort</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Pozostałe Procedury <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Procedury_Pozostale/Procedura_dot_Ochrony_Obiektow.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura dot. Ochrony Obiektów</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/03_Pion_Operacji_Hotelowych/Procedury_Pozostale/Procedura_dot_Utrzymania_Technicznego.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura dot. Utrzymania Technicznego</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-bullhorn nav-icon"></i> Sprzedaż i Marketing
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li class="has-submenu">
+                                <a href="#">Marketing i Komunikacja <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/04_Pion_Sprzedazy_i_Marketingu/Marketing_i_Komunikacja/Baza_Materialow_Marketingowych_Zdjecia_i_Logotypy.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Baza Materiałów Marketingowych (Zdjęcia i Logotypy)</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/04_Pion_Sprzedazy_i_Marketingu/Marketing_i_Komunikacja/Brand_Book_CHG.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Brand book CHG</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/04_Pion_Sprzedazy_i_Marketingu/Marketing_i_Komunikacja/Wytyczne_do_Prowadzenia_Mediow_Spolecznosciowych.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Wytyczne do Prowadzenia Social Media</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Sprzedaż i Revenue Management <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/04_Pion_Sprzedazy_i_Marketingu/Sprzedaz_i_Revenue_Management/Cennik_Uslug_Konferencyjnych_MICE.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Cennik Usług Konferencyjnych MICE</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/04_Pion_Sprzedazy_i_Marketingu/Sprzedaz_i_Revenue_Management/Polityka_Cenowa_i_Zarzadzanie_Przychodem.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Polityka Cenowa i Zarządzanie Przychodem</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/04_Pion_Sprzedazy_i_Marketingu/Sprzedaz_i_Revenue_Management/Standardy_Ofertowania_dla_Klientow_Biznesowych.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Standardy Ofertowania dla Klientów Biznesowych</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-chart-pie nav-icon"></i> Pion Finansowy
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                         <ul class="submenu">
+                            <li class="has-submenu">
+                                <a href="#">Controlling i Raportowanie <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/05_Pion_Finansowy/Controlling_i_Raportowanie/Procedura_Budzetowania_Rocznego.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Budżetowania Rocznego</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/05_Pion_Finansowy/Controlling_i_Raportowanie/Tabela_Uprawnien_do_Podpisywania_Umow_i_Zobowiazan.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Tabela Uprawnień do Podpisywania Umów i Zobowiązań</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/05_Pion_Finansowy/Controlling_i_Raportowanie/Wzor_Raportu_Miesiecznego_dla_Dyrektora_Hotelu.xlsx" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel nav-icon"></i> Wzór Raportu Miesięcznego dla Dyrektora Hotelu</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Księgowość i Podatki <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/05_Pion_Finansowy/Ksiegowosc_i_Podatki/Instrukcja_Obiegu_Faktur_Kosztowych.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Instrukcja Obiegu Faktur Kosztowych</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/05_Pion_Finansowy/Ksiegowosc_i_Podatki/Instrukcja_Rozliczania_Kart_Sluzbowych.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Instrukcja Rozliczania Kart Służbowych</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/05_Pion_Finansowy/Ksiegowosc_i_Podatki/Procedura_Rozliczania_Delegacji.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Rozliczania Delegacji</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/05_Pion_Finansowy/Ksiegowosc_i_Podatki/Procedura_Rozliczania_Platnosci_Dostawcow.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Rozliczania Płatności Dostawców</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-laptop-code nav-icon"></i> Pion IT
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li class="has-submenu">
+                                <a href="#">Bezpieczeństwo IT <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/06_Pion_IT/Bezpieczenstwo_IT/Polityka_Bezpieczenstwa_Informacji.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Polityka Bezpieczeństwa Informacji</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/06_Pion_IT/Bezpieczenstwo_IT/Procedura_Postepowania_w_Razie_Incydentu_Cyberbezpieczenstwa.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Postępowania w Razie Incydentu Cyberbezpieczeństwa</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Systemy i Wsparcie Techniczne <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/06_Pion_IT/Systemy_i_Wsparcie_Techniczne/Instrukcja_Obslugi_Poczty_i_MS_Teams.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Instrukcja Obsługi Poczty i MS Teams</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/06_Pion_IT/Systemy_i_Wsparcie_Techniczne/Jak_Zglaszac_Problemy_do_Wsparcia_IT.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Jak zgłaszać Problemy do Wsparcia IT?</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/06_Pion_IT/Systemy_i_Wsparcie_Techniczne/Podrecznik_Uzytkownika_Systemu_PMS.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Podręcznik Użytkownika Systemu PMS</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-gavel nav-icon"></i> Pion Prawny i Administracja
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li class="has-submenu">
+                                <a href="#">Compliance i RODO <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/07_Pion_Prawny_i_Administracja/Compliance_i_RODO/Polityka_Ochrony_Danych_Osobowych_RODO.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Polityka Ochrony Danych Osobowych (RODO)</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/07_Pion_Prawny_i_Administracja/Compliance_i_RODO/Polityka_Przeciwdzialania_Korupcji_i_Konfliktom_Interesow.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Polityka Przeciwdziałania Korupcji i Konfliktom Interesów</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/07_Pion_Prawny_i_Administracja/Compliance_i_RODO/Procedura_Zglaszania_Naruszen_Prawa.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Zgłaszania Naruszeń Prawa</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Zakupy i Administracja <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/07_Pion_Prawny_i_Administracja/Zakupy_i_Administracja/Polityka_Zakupowa_i_Wyboru_Dostawcow.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Polityka Zakupowa i Wyboru Dostawców</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/07_Pion_Prawny_i_Administracja/Zakupy_i_Administracja/Procedura_Zamowien_Publicznych.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Zamówień Publicznych</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/07_Pion_Prawny_i_Administracja/Zakupy_i_Administracja/Wzory_Umow_z_Dostawcami_i_Klientami_Korporacyjnymi.docx" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-word nav-icon"></i> Wzory Umów z Dostawcami i Klientami Korporacyjnymi</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-shield-halved nav-icon"></i> BHP i Zarządzanie Kryzysowe
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li class="has-submenu">
+                                <a href="#">BHP <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/08_BHP_i_Zarzadzanie_Kryzysowe/BHP/Ogolna_Instrukcja_BHP.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Instrukcja BHP</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/08_BHP_i_Zarzadzanie_Kryzysowe/BHP/Zasady_Udzielania_Pierwszej_Pomocy.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Zasady Udzielania Pierwszej Pomocy</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/08_BHP_i_Zarzadzanie_Kryzysowe/BHP/Karta_Oceny_Ryzyka_Zawodowego_dla_Wybranych_Stanowisk.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Karta Oceny Ryzyka Zawodowego dla Wybranych Stanowisk</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Zarządzanie Kryzysowe <i class="fas fa-chevron-down submenu-toggle"></i></a>
+                                <ul class="submenu">
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/08_BHP_i_Zarzadzanie_Kryzysowe/Zarzadzanie_Kryzysowe/Plan_Komunikacji_Kryzysowej.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Plan Komunikacji Kryzysowej</a></li>
+                                    <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/08_BHP_i_Zarzadzanie_Kryzysowe/Zarzadzanie_Kryzysowe/Procedura_Ewakuacji_Hotelu.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Procedura Ewakuacji Hotelu</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                     <li class="has-submenu">
+                        <a href="#">
+                            <i class="fas fa-circle-info nav-icon"></i> Informacje Ogólne i FAQ
+                            <i class="fas fa-chevron-down submenu-toggle"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/09_Informacje_Ogolne_i_FAQ/FAQ_Pracownicze.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> FAQ Pracownicze</a></li>
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/09_Informacje_Ogolne_i_FAQ/Historia_i_Misja_Cornelia_Hotels_Group.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Historia i Misja Cornelia Hotels Group</a></li>
+                            <li><a href="https://chg-dataset.s3.us-east-1.amazonaws.com/09_Informacje_Ogolne_i_FAQ/Lista_Kontaktow_do_Dzialow_w_Centrali.pdf" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-pdf nav-icon"></i> Lista Kontaktów do Działów w Centrali</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="app-chat">
+            <header class="chat-header">
+                <h1 class="header-title">CHG Compass</h1>
+            </header>
+            <div id="chat-box" class="chat-box">
+                <div class="message bot-message">
+                    <p>Witaj w CHG Compass. Jestem Twoim asystentem AI gotowym do pomocy. Wpisz swoje pytanie, aby rozpocząć.</p>
+                </div>
+            </div>
+            <footer class="chat-input-area">
+                <input type="text" id="user-input" placeholder="Zadaj pytanie..." autocomplete="off">
+                <button id="send-btn" aria-label="Wyślij">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" /></svg>
+                </button>
+            </footer>
+        </main>
+
+        <aside class="app-info">
+            <div class="info-card">
+                <h3 class="section-title">Nasze Marki:</h3>
+                <div class="brands-container">
+                    <div class="brand-logo"><img src="graphics/Cornelia Budget.png" alt="Cornelia Budget"></div>
+                    <div class="brand-logo"><img src="graphics/Cornelia Comfort.png" alt="Cornelia Comfort"></div>
+                    <div class="brand-logo"><img src="graphics/Cornelia Select.png" alt="Cornelia Select"></div>
+                    <div class="brand-logo"><img src="graphics/Cornelia Palace.png" alt="Cornelia Palace"></div>
+                    <div class="brand-logo"><img src="graphics/Cornelia Royal Resort.png" alt="Cornelia Royal Resort"></div>
+                </div>
+            </div>
+            <div class="info-card">
+                <h3 class="section-title">Krótki Opis Agenta:</h3>
+                <p>
+                    CHG Compass to inteligentny asystent AI, którego sercem jest nowoczesna architektura RAG. Łączy ona moc zaawansowanych modeli językowych (LLM) z wewnętrzną bazą wiedzy firmy.
+                    <br><br>
+                    Gdy zadajesz pytanie, agent błyskawicznie przeszukuje firmowe dokumenty. Wykorzystuje do tego wyszukiwanie hybrydowe, które rozumie zarówno konkretne słowa kluczowe, jak i ogólny sens zapytania. Dopiero na podstawie precyzyjnie dobranych fragmentów, model językowy tworzy trafną i wiarygodną odpowiedź.
+                    <br><br>
+                    Projekt w unikalny sposób integruje dwie wiodące technologie chmurowe. Szybki i niezawodny interfejs użytkownika (frontend) działa na Amazon Web Services, podczas gdy cała analityka i sztuczna inteligencja (backend) opiera się na mocy obliczeniowej usług Azure AI.
+                </p>
+            </div>
+        </aside>
+
+        <footer class="app-footer">
+            © 2025 Kamil Lemański
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const apiUrl = 'https://ixzujnynvl.execute-api.us-east-1.amazonaws.com/default/ask';
+            
+            const chatBox = document.getElementById('chat-box');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+
+            sendBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            function addMessage(content, senderClass) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', senderClass);
+                messageElement.innerHTML = content;
+                chatBox.appendChild(messageElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                return messageElement;
+            }
+
+            async function sendMessage() {
+                const question = userInput.value.trim();
+                if (!question) return;
+
+                addMessage(`<p>${question}</p>`, 'user-message');
+                userInput.value = '';
+                userInput.focus();
+
+                const loadingHTML = `
+                    <div class="typing-indicator">
+                        <span></span><span></span><span></span>
+                    </div>`;
+                const loadingMessage = addMessage(loadingHTML, 'bot-message');
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ question: question })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({ error: 'Błąd serwera.' }));
+                        throw new Error(errorData.error || `Błąd HTTP: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    const formattedAnswer = data.answer.replace(/\n/g, '<br>');
+                    
+                    loadingMessage.innerHTML = `<p>${formattedAnswer}</p>`; 
+
+                } catch (error) {
+                    const formattedError = `Przepraszam, wystąpił błąd: ${error.message}. Proszę, spróbuj ponownie.`;
+                    loadingMessage.innerHTML = `<p>${formattedError}</p>`;
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.sidebar-nav .has-submenu > a');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(event) {
+                    if (this.parentElement.classList.contains('has-submenu')) {
+                        event.preventDefault();
+                    }
+                    const parentLi = this.parentElement;
+                    
+                    if (parentLi.classList.contains('open')) {
+                         parentLi.classList.remove('open');
+                    } else {
+                        const sameLevelOpenMenus = parentLi.parentElement.querySelectorAll(':scope > .has-submenu.open');
+                        sameLevelOpenMenus.forEach(menu => {
+                            if (menu !== parentLi) {
+                                menu.classList.remove('open');
+                            }
+                        });
+                        parentLi.classList.add('open');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
