@@ -76,22 +76,39 @@ Zwrot odpowiedzi: Wygenerowana odpowiedź jest zwracana przez API Gateway do fro
 📂 Struktura plików:
 
 chg-agent/
+
 ├── aws-frontend/                                     # Pliki interfejsu użytkownika hostowane na AWS S3
+
 │   ├── graphics/                                     # Katalog na pliki graficzne (logo, ikony)
+
 │   ├── index.html                                    # Główny plik HTML strony
+
 │   └── script.js                                     # Skrypt JavaScript do obsługi logiki frontendu
+
 │
+
 ├── aws-lambda/                                       # Kod funkcji bezserwerowej na AWS
+
 │   └── function.py                                   # Funkcja Lambda pełniąca rolę pośrednika (proxy) do backendu Azure
+
 │
+
 ├── azure-backend/                                    # Komponenty AI i RAG hostowane na Microsoft Azure
+
 │   ├── ai foundry                                    # Konfiguracja platformy hostującej model LLM
+
 │   └── ai search/                                    # Konfiguracja usługi Azure AI Search do przeszukiwania wiedzy
+
 │       ├── indekser                                  # Definicja indeksera automatyzującego pobieranie danych
+
 │       ├── indeks                                    # Definicja schematu indeksu przechowującego dane
+
 │       └── skillset                                  # Definicja umiejętności AI (dzielenie tekstu)
+
 │
+
 ├── BAZA_WIEDZY_CORNELIA_HOTELS_GROUP/                # Baza wiedzy zawierająca 78 dokumentów
+
 └── README.md                                         # Ten Plik
 
 ------------
