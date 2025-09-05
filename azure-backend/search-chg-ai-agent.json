@@ -1,0 +1,26 @@
+{
+    "id": "/subscriptions/d4f29ab0-0efe-421f-8a08-9f19de8b70ef/resourceGroups/chg-agent-portfolio/providers/Microsoft.Search/searchServices/search-chg-ai-agent",
+    "name": "search-chg-ai-agent",
+    "type": "Microsoft.Search/searchServices",
+    "location": "Sweden Central",
+    "tags": {},
+    "properties": {
+        "replicaCount": 1,
+        "partitionCount": 1,
+        "status": "running",
+        "statusDetails": "",
+        "provisioningState": "succeeded",
+        "hostingMode": "default",
+        "publicNetworkAccess": "Enabled",
+        "networkRuleSet": {
+            "ipRules": [],
+            "bypass": "None"
+        },
+        "privateEndpointConnections": [],
+        "sharedPrivateLinkResources": []
+    },
+    "sku": {
+        "name": "free"
+    },
+    "apiVersion": "2020-08-01"
+}
