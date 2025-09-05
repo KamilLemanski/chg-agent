@@ -1,0 +1,33 @@
+{
+  "@odata.context": "https://search-chg-ai-agent.search.windows.net/$metadata#indexers/$entity",
+  "@odata.etag": "\"0x8DDEA269C9307C4\"",
+  "name": "indexer-chg",
+  "description": null,
+  "dataSourceName": "chgagentstorage",
+  "skillsetName": "chg-chunking-skillset",
+  "targetIndexName": "chg-knowledge-index",
+  "disabled": null,
+  "schedule": null,
+  "parameters": null,
+  "fieldMappings": [
+    {
+      "sourceFieldName": "metadata_storage_name",
+      "targetFieldName": "source_filename",
+      "mappingFunction": null
+    }
+  ],
+  "outputFieldMappings": [
+    {
+      "sourceFieldName": "/document/pages/*",
+      "targetFieldName": "chunk_content",
+      "mappingFunction": null
+    },
+    {
+      "sourceFieldName": "/document/pages/*/vector",
+      "targetFieldName": "chunk_vector",
+      "mappingFunction": null
+    }
+  ],
+  "cache": null,
+  "encryptionKey": null
+}

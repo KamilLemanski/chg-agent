@@ -1,0 +1,61 @@
+{
+  "@odata.etag": "\"0x8DDEA26791F1EDF\"",
+  "name": "chg-chunking-skillset",
+  "description": "Dzieli dokumenty na fragmenty i generuje dla nich wektory embeddingowe.",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
+      "name": "chunking-skill",
+      "description": "Dzieli treść na fragmenty o długości 1024 znaków z nakładką 256.",
+      "context": "/document",
+      "defaultLanguageCode": "en",
+      "textSplitMode": "pages",
+      "maximumPageLength": 1024,
+      "pageOverlapLength": 256,
+      "maximumPagesToTake": 0,
+      "unit": "characters",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/content",
+          "inputs": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "textItems",
+          "targetName": "pages"
+        }
+      ]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "embedding-skill",
+      "description": "Generuje wektory dla każdego fragmentu tekstu.",
+      "context": "/document/pages/*",
+      "resourceUri": "https://chg-agent-openai.openai.azure.com",
+      "apiKey": "<redacted>",
+      "deploymentId": "text-embedding-3-small",
+      "dimensions": 1536,
+      "modelName": "text-embedding-3-small",
+      "inputs": [
+        {
+          "name": "text",
+          "source": "/document/pages/*",
+          "inputs": []
+        }
+      ],
+      "outputs": [
+        {
+          "name": "embedding",
+          "targetName": "vector"
+        }
+      ]
+    }
+  ],
+  "cognitiveServices": {
+    "@odata.type": "#Microsoft.Azure.Search.AIServicesByKey",
+    "key": "<redacted>",
+    "subdomainUrl": "https://chg-chunking-skillset.cognitiveservices.azure.com/"
+  }
+}
