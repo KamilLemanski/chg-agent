@@ -97,15 +97,15 @@ chg-agent/
 
 ├── azure-backend/                                    # Komponenty AI i RAG hostowane na Microsoft Azure
 
-│   ├── ai foundry                                    # Konfiguracja platformy hostującej model LLM
+│   ├── chg-agent-openai.json                         # Konfiguracja platformy Azure AI Foundry
 
-│   └── ai search/                                    # Konfiguracja usługi Azure AI Search do przeszukiwania wiedzy
+│   ├── search-chg-ai-agent.json                      # Konfiguracja usługi Azure AI Search do przeszukiwania wiedzy
 
-│       ├── indekser                                  # Definicja indeksera automatyzującego pobieranie danych
+│   ├── indexer-chg.json                              # Definicja indeksera automatyzującego pobieranie danych
 
-│       ├── indeks                                    # Definicja schematu indeksu przechowującego dane
+│   ├── chg-knowledge-index.json                      # Definicja schematu indeksu przechowującego dane
 
-│       └── skillset                                  # Definicja umiejętności AI (dzielenie tekstu)
+│   └── chg-chunking-skillset.json                    # Definicja umiejętności AI (dzielenie tekstu)
 
 │
 
