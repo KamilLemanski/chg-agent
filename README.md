@@ -89,6 +89,8 @@ chg-agent/
 
 ├── aws-lambda/                                       # Kod funkcji bezserwerowej na AWS
 
+│   ├── requirements.txt                              # Zewnętrzne biblioteki i pakiety Python
+
 │   └── function.py                                   # Funkcja Lambda pełniąca rolę pośrednika (proxy) do backendu Azure
 
 │
