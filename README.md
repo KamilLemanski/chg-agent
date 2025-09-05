@@ -2,7 +2,7 @@
 
 Live App ➤ https://chg-agent.s3.us-east-1.amazonaws.com/index.html
 
-Agent CHG Compass to zaawansowane rozwiązanie typu konwersacyjnej AI, pełniące rolę wirtualnego eksperta. Jego nadrzędnym celem jest zapewnienie natychmiastowego dostępu do precyzyjnych i spójnych informacji dotyczących wiedzy o fikcyjnej sieci hoteli - Cornelia Hotel Group. Agent skupia się na bazie dokumentów zawirającej benefity, procedury, zasady i inne dokumenty kieorwane dla pracowników organizacji.
+Agent CHG Compass to zaawansowane rozwiązanie typu konwersacyjnej AI, pełniące rolę wirtualnego eksperta. Jego nadrzędnym celem jest zapewnienie natychmiastowego dostępu do precyzyjnych i spójnych informacji dotyczących wiedzy o fikcyjnej sieci hoteli - Cornelia Hotel Group. Agent skupia się na bazie dokumentów zawirającej benefity, procedury, zasady i inne dokumenty kierowane do pracowników organizacji.
 
 CHG Compass to inteligentny asystent AI, którego sercem jest nowoczesna architektura RAG. Łączy ona moc zaawansowanych modeli językowych (LLM) z wewnętrzną bazą wiedzy firmy.
 
